@@ -1,4 +1,4 @@
-import "@std/dotenv/load";
+import "jsr:@std/dotenv/load";
 import { jwtVerify } from "npm:jose";
 import { Payload } from "../types/auth.ts";
 
