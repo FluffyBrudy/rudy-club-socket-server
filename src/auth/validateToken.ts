@@ -1,5 +1,5 @@
 import "@std/dotenv/load";
-import { jwtVerify } from "jose";
+import { jwtVerify } from "npm:jose";
 import { Payload } from "../types/auth.ts";
 
 export async function verifyAuthToken(
