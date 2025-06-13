@@ -56,9 +56,9 @@ export class SocketManager {
     }
   }
 
-  public send(socket: WebSocket, data: unknown) {
+  public send(socket: WebSocket, data: unknown, failed = false) {
     if (socket.readyState === WebSocket.OPEN) {
-      const resporesponse = wrapResponse(data);
+      const resporesponse = wrapResponse(data, failed);
       socket.send(resporesponse);
     }
   }

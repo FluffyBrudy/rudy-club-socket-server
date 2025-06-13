@@ -1,5 +1,7 @@
+import { validate } from "uuidValidator";
 import { verifyAuthToken } from "./auth/validateToken.ts";
 import { SocketManager } from "./manager/socketManager.ts";
+import { wrapResponse } from "./utils/responseWrapper.ts";
 
 Deno.serve(async (req) => {
   if (req.headers.get("upgrade") !== "websocket") {
@@ -22,11 +24,29 @@ Deno.serve(async (req) => {
   });
 
   socket.addEventListener("message", (event) => {
-    console.log(event.data);
+    try {
+      const data = JSON.parse(event.data);
+      const receiverId = data.receiverId;
+      if (!validate(receiverId)) {
+        manager.send(socket, "invalid receiver", true);
+      } else {
+        manager.sendToreceiver(receiverId, { data: event.data }, socket);
+      }
+    } catch (error) {
+      manager.send(
+        socket,
+        (error as Error)?.message ?? "invalid message format",
+        true
+      );
+    }
   });
 
-  socket.addEventListener("error", (_) => {
-    socket.close(1008);
+  socket.addEventListener("error", (ev) => {
+    socket.close(1008, wrapResponse(ev, true));
+  });
+
+  socket.addEventListener("close", (ev) => {
+    socket.close(ev.code, wrapResponse("successfully disconnected"));
   });
 
   return response;
