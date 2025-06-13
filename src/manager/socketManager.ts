@@ -1,3 +1,4 @@
+import { SUCCESS_MESSAGES } from "../constants.ts";
 import { sendAcknowledgement, wrapResponse } from "../utils/responseWrapper.ts";
 
 export class SocketManager {
@@ -41,25 +42,25 @@ export class SocketManager {
   public sendToreceiver(
     receiverId: string,
     data: unknown,
-    sender: WebSocket
+    sender?: WebSocket
   ): void {
     const receiver = this.userSocketMap.get(receiverId);
 
     if (receiver && receiver.readyState === WebSocket.OPEN) {
       const response = wrapResponse<typeof data>(data);
       receiver.send(response);
-      sender.send(sendAcknowledgement());
+      if (sender) sender.send(sendAcknowledgement());
     } else {
       if (sender && sender.readyState === WebSocket.OPEN) {
-        sender.send("receiver may be offline");
+        sender.send(JSON.stringify(SUCCESS_MESSAGES.RECEIVER_OFFLINE));
       }
     }
   }
 
-  public send(socket: WebSocket, data: unknown, failed = false) {
+  public send(socket: WebSocket, data: unknown) {
     if (socket.readyState === WebSocket.OPEN) {
-      const resporesponse = wrapResponse(data, failed);
-      socket.send(resporesponse);
+      const response = wrapResponse(data);
+      socket.send(response);
     }
   }
 }

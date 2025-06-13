@@ -1,10 +1,10 @@
-export function wrapResponse<T>(data?: T, failed = false) {
-  if (!data) {
+export function wrapResponse<T>(data?: T) {
+  if (data === undefined) {
     return JSON.stringify({ success: true });
   }
   return JSON.stringify({
     data: data,
-    success: true && !failed,
+    success: true,
   });
 }
 
