@@ -1,4 +1,4 @@
-import { validate } from "uuidValidator";
+import { validate } from "https://deno.land/std@0.177.0/uuid/mod.ts";
 import { verifyAuthToken } from "./auth/validateToken.ts";
 import { SocketManager } from "./manager/socketManager.ts";
 import { wrapResponse } from "./utils/responseWrapper.ts";

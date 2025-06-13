@@ -5,8 +5,7 @@
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
-    "jose": "npm:jose@^6.0.11",
-    "uuidValidator": "https://deno.land/std@0.177.0/uuid/mod.ts"
+    "jose": "npm:jose@^6.0.11"
   },
   "deploy": {
     "project": "161894fb-1a4d-46a1-98bf-6efb806ca9ee",
