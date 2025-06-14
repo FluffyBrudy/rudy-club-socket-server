@@ -11,6 +11,7 @@ export const STATUS_CODES = {
 
 export const ERROR_MESSAGES = {
   NO_AUTH_TOKEN: { error: "no auth token provided" },
+  INVALID_AUTH_TOKEN: { error: "invalid auth token" },
   UNAUTHORIZED_ACCESS: { error: "unauthorized access" },
   MISSING_FIELDS: { error: "expected receiver id and data" },
   INVALID_RECEIVER: { error: "invalid receiver id" },

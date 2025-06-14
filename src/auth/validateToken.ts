@@ -9,11 +9,14 @@ export async function verifyAuthToken(
   try {
     const token = req.headers.get("Authorization");
     if (!token) return [ERROR_MESSAGES.NO_AUTH_TOKEN, null];
+    if (!token.startsWith("Bearer "))
+      return [ERROR_MESSAGES.INVALID_AUTH_TOKEN, null];
 
     const secret = Deno.env.get("JWT_SECRET")!;
     const encodedSecret = new TextEncoder().encode(secret);
 
-    const { payload } = await jwtVerify(token, encodedSecret);
+    const prefixOmittedToken = token.replace("Bearer ", "");
+    const { payload } = await jwtVerify(prefixOmittedToken, encodedSecret);
     return [null, payload as unknown as Payload];
   } catch (error) {
     console.error("Invalid JWT", (error as Error).message);
