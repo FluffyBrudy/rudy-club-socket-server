@@ -11,6 +11,7 @@ import {
 
 Deno.serve(async (req) => {
   const [error, payload] = await verifyAuthToken(req);
+
   if (!payload) {
     return new Response(JSON.stringify(error), {
       status: STATUS_CODES.UNAUTHORIZED_REQUEST,
@@ -19,12 +20,11 @@ Deno.serve(async (req) => {
   }
 
   const url = req.url;
-
   if (url.endsWith("/send-notification")) {
     try {
       const body: Partial<RequestBodyData> = await req.json();
 
-      if (body.data === undefined || !body.receiverId) {
+      if (!body.receiverId) {
         return new Response(JSON.stringify(ERROR_MESSAGES.MISSING_FIELDS), {
           status: STATUS_CODES.UNPROCESSABLE_ENTITY,
           headers: JSON_HEADERS,
@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
         but if usre is active it sends successfully
        */
       const manager = SocketManager.getInstance();
-      manager.sendToreceiver(body.receiverId, body.data);
+      manager.sendToreceiver(body.receiverId, body);
 
       return new Response(JSON.stringify(SUCCESS_MESSAGES.NOTIFICATION_SENT), {
         status: STATUS_CODES.SUCCESS,
